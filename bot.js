@@ -16,7 +16,7 @@ const standupQuestions = [
   "Any blockers?"
 ];
 
-app.command('/standup', async ({ command, ack, say }) => {
+app.command('/standup', async ({ command, ack, respond }) => {
   await ack();
   try {
     const result = await app.client.conversations.list({
@@ -31,7 +31,7 @@ app.command('/standup', async ({ command, ack, say }) => {
       value: channel.id
     }));
 
-    await say({
+    await respond({
       text: 'Select a channel for the standup updates:',
       blocks: [
         {
@@ -59,7 +59,6 @@ app.action('select_channel', async ({ body, ack, say }) => {
   await say(`Standup updates will be posted in <#${standupChannel}>.`);
 });
 
-
 const sendDailyQuestions = async () => {
   try {
     const result = await app.client.users.list({
@@ -83,7 +82,6 @@ const sendDailyQuestions = async () => {
 
 // Schedule the job to run at 9 AM every day
 schedule.scheduleJob('0 9 * * *', sendDailyQuestions);
-
 
 let userResponses = {};
 
